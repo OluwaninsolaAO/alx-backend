@@ -32,8 +32,7 @@ def get_user():
 
 @app.before_request
 def before_request():
-    """Uses get_user to find a user if any,
-    and set it as a global on flask.g.user"""
+    """Uses get_user to find a user"""
     g.user = get_user()
 
 
