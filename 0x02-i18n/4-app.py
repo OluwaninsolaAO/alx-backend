@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""3. Parametrize templates"""
+"""4. Force locale with URL parameter"""
 
 from flask import Flask, render_template, request
 from flask_babel import Babel
@@ -20,6 +20,9 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     """Get User locale from flask request"""
+    locale = request.args.get('locale', None)
+    if locale in app.config['LANGUAGES']:
+        return locale
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
