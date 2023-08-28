@@ -14,10 +14,10 @@ queue.on('job enqueue', function (id, type) {
   console.log('Notification job created:', id);
 });
 
-queue.on('job complete', function (result) {
+queue.on('job complete', function (job) {
   console.log('Notification job completed');
 });
 
-queue.on('job failed', function (error) {
+queue.on('job failed', function (job, error) {
   console.log('Notification job failed');
 });
