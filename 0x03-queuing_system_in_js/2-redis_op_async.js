@@ -1,6 +1,8 @@
 import { createClient, print } from 'redis';
 
+const util = require('util');
 const client = createClient();
+const get = util.promisify(client.get).bind(client);
 
 function setNewSchool(schoolName, value) {
   client.set(schoolName, value, (error, reply) => {
@@ -12,14 +14,13 @@ function setNewSchool(schoolName, value) {
   });
 }
 
-function displaySchoolValue(schoolName) {
-  client.get(schoolName, (error, value) => {
-    if (error) {
-      console.log('Error:', error);
-    } else {
-      console.log(value);
-    }
-  });
+async function displaySchoolValue(schoolName) {
+  try {
+    const name = await get(schoolName);
+    console.log(name);
+  } catch (error) {
+    console.log('Error:', error);
+  }
 }
 
 client.on('error', function (error) {
