@@ -49,23 +49,21 @@ const jobs = [
   },
 ];
 
-queue.on('job enqueue', function (id, type) {
-  console.log('Notification job created:', id);
-});
-
-queue.on('job complete', function (job) {
-  console.log('Notification job', job.id, 'completed');
-});
-
-queue.on('job failed', function (job, error) {
-  console.log('Notification job', job.id, 'failed:', error);
-});
-
-queue.on('job progress', function (job, progress) {
-  console.log('Notification job', job.id, `${progress}%`, 'complete');
-});
-
 for (const data of jobs) {
   const job = queue.create(qName, data);
-  job.save();
+
+  job.save((error) => {
+    console.log('Notification job created:', job.id);
+  });
+
+  job
+    .on('complete', function () {
+      console.log('Notification job', job.id, 'completed');
+    })
+    .on('failed', function (error) {
+      console.log('Notification job', job.id, 'failed:', error);
+    })
+    .on('progress', function (progress, data) {
+      console.log('Notification job', job.id, `${progress}%`, 'complete');
+    });
 }
